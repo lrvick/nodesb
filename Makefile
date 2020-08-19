@@ -13,4 +13,5 @@ build: submodules
 	cp -R modules/node/ build/
 	cp -R modules/libsquash build/deps/libsquash
 	cp -R modules/libautoupdate build/deps/libautoupdate
+	cp -R overlay/deps/libsquash/* build/deps/libsquash/
 	cd build && patch -p1 < ../patches/encloseio.patch

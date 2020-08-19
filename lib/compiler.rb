@@ -40,7 +40,7 @@ class Compiler
 
   def node_version
     @node_version ||= (
-      version_info = File.read(File.join(PRJ_ROOT, "node/src/node_version.h"))
+      version_info = File.read(File.join(PRJ_ROOT, "build/src/node_version.h"))
       versions = []
       if version_info =~ /NODE_MAJOR_VERSION\s+(\d+)/
         versions << $1.dup
@@ -140,7 +140,7 @@ class Compiler
     @utils.mkdir_p(@options[:tmpdir])
     @tmpdir_node = File.join(@options[:tmpdir], @node_dir)
     unless Dir.exist?(@tmpdir_node)
-      @utils.cp_r(File.join(PRJ_ROOT, 'node'), @tmpdir_node, preserve: true)
+      @utils.cp_r(File.join(PRJ_ROOT, 'build'), @tmpdir_node, preserve: true)
     end
     @npm_package.stuff_tmpdir if @npm_package
   end
