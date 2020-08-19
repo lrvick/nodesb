@@ -97,15 +97,6 @@ index 6f61d725a9..b22aca6329 100644
        ],
        'direct_dependent_settings': {
          'include_dirs': [ 'include' ],
-diff --git a/doc/full-white-stripe.jpg b/doc/full-white-stripe.jpg
-index 798473392f..bd9d5485ca 100644
-Binary files a/doc/full-white-stripe.jpg and b/doc/full-white-stripe.jpg differ
-diff --git a/doc/osx_installer_logo.png b/doc/osx_installer_logo.png
-index 765a2193d2..3094d16cf1 100644
-Binary files a/doc/osx_installer_logo.png and b/doc/osx_installer_logo.png differ
-diff --git a/doc/thin-white-stripe.jpg b/doc/thin-white-stripe.jpg
-index 5342304e79..f64943d58a 100644
-Binary files a/doc/thin-white-stripe.jpg and b/doc/thin-white-stripe.jpg differ
 diff --git a/lib/child_process.js b/lib/child_process.js
 index 98d3faf4d5..85a8132a10 100644
 --- a/lib/child_process.js
@@ -583,9 +574,6 @@ index 7d6d9b1a01..3d05953cf8 100644
  }
 +
  #endif
-diff --git a/src/res/node.ico b/src/res/node.ico
-index dad74d3cc0..6165a8b3c6 100644
-Binary files a/src/res/node.ico and b/src/res/node.ico differ
 diff --git a/test/async-hooks/test-ttywrap.readstream.js b/test/async-hooks/test-ttywrap.readstream.js
 index 65853da1f7..bb502ad23d 100644
 --- a/test/async-hooks/test-ttywrap.readstream.js
@@ -1125,25 +1113,3 @@ index 537b35508b..d04928a5b4 100644
      <description></description>
      <post-install type="none"/>
      <requireAuthorization/>
-diff --git a/vcbuild.bat b/vcbuild.bat
-index 30b557c26b..1d753b8ede 100644
---- a/vcbuild.bat
-+++ b/vcbuild.bat
-@@ -259,7 +259,7 @@ set "msbcpu=/m:2"
- if "%NUMBER_OF_PROCESSORS%"=="1" set "msbcpu=/m:1"
- set "msbplatform=Win32"
- if "%target_arch%"=="x64" set "msbplatform=x64"
--msbuild node.sln %msbcpu% /t:%target% /p:Configuration=%config% /p:Platform=%msbplatform% /clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal /nologo
-+msbuild node.sln %msbcpu% /t:%target% /p:Configuration=%config% /p:Platform=%msbplatform% /clp:NoSummary;NoItemAndPropertyList;Verbosity=quiet /nologo
- if errorlevel 1 goto exit
- if "%target%" == "Clean" goto exit
- 
-@@ -341,7 +341,7 @@ if not defined msi goto run
- 
- :msibuild
- echo Building node-v%FULLVERSION%-%target_arch%.msi
--msbuild "%~dp0tools\msvs\msi\nodemsi.sln" /m /t:Clean,Build /p:PlatformToolset=%PLATFORM_TOOLSET% /p:GypMsvsVersion=%GYP_MSVS_VERSION% /p:Configuration=%config% /p:Platform=%target_arch% /p:NodeVersion=%NODE_VERSION% /p:FullVersion=%FULLVERSION% /p:DistTypeDir=%DISTTYPEDIR% %noetw_msi_arg% %noperfctr_msi_arg% /clp:NoSummary;NoItemAndPropertyList;Verbosity=minimal /nologo
-+msbuild "%~dp0tools\msvs\msi\nodemsi.sln" /m /t:Clean,Build /p:PlatformToolset=%PLATFORM_TOOLSET% /p:GypMsvsVersion=%GYP_MSVS_VERSION% /p:Configuration=%config% /p:Platform=%target_arch% /p:NodeVersion=%NODE_VERSION% /p:FullVersion=%FULLVERSION% /p:DistTypeDir=%DISTTYPEDIR% %noetw_msi_arg% %noperfctr_msi_arg% /clp:NoSummary;NoItemAndPropertyList;Verbosity=quiet /nologo
- if errorlevel 1 goto exit
- 
- if not defined sign goto upload
