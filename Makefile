@@ -1,3 +1,5 @@
+all: submodules build
+
 .PHONY: submodules
 submodules:
 	if git submodule status | egrep -q '^[-]|^[+]'; then \
@@ -10,8 +12,10 @@ clean:
 	rm -rf build
 
 build: submodules
-	cp -R modules/node/ build/
-	cp -R modules/libsquash build/deps/libsquash
-	cp -R modules/libautoupdate build/deps/libautoupdate
-	cp -R overlay/deps/libsquash/* build/deps/libsquash/
-	cd build && patch -p1 < ../patches/encloseio.patch
+	rsync -av modules/node/ build/
+	rsync -av modules/libsquash/ build/deps/libsquash/
+	rsync -av overlay/deps/libsquash/ build/deps/libsquash/
+	cd build \
+		&& patch -p1 < ../patches/encloseio.patch \
+		&& ./configure \
+		&& make

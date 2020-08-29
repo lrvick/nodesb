@@ -63,7 +63,7 @@ class Compiler
 
   def check_base_node_version!
     expectation = "v#{node_version}"
-    got = `node -v`.to_s.strip
+    got = `build/out/Release/node -v`.to_s.strip
     unless got.include?(expectation)
       msg =  "=== WARNING ===\n"
       msg += "Please make sure to have installed the correct version of node in your environment.\n"
@@ -102,7 +102,7 @@ class Compiler
     @options[:npm] ||= 'npm'
     @node_dir = "node-#{node_version}-#{VERSION}"
     @options[:make_args] ||= '-j4'
-    @options[:vcbuild_args] ||= `node -pe process.arch`.to_s.strip
+    @options[:vcbuild_args] ||= `build/out/Release/node -pe process.arch`.to_s.strip
     if Gem.win_platform?
       @options[:output] ||= 'a.exe'
     else

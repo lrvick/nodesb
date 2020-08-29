@@ -309,39 +309,36 @@ index 01a16a9f0c..72dfffaa35 100644
      // and the main thread won't see it.
      if (process.argv[1] !== '--debug-agent')
 diff --git a/node.gyp b/node.gyp
-index 81f549f8b6..aa3b4217a1 100644
+index 81f549f8b6..b3824c70ef 100644
 --- a/node.gyp
 +++ b/node.gyp
-@@ -150,7 +150,9 @@
+@@ -150,7 +150,8 @@
  
        'dependencies': [
          'node_js2c#host',
 -        'deps/nghttp2/nghttp2.gyp:nghttp2'
 +        'deps/nghttp2/nghttp2.gyp:nghttp2',
 +        'deps/libsquash/enclose_io_libsquash.gyp:enclose_io_libsquash',
-+        'deps/libautoupdate/libautoupdate.gyp:libautoupdate',
        ],
  
        'includes': [
-@@ -161,8 +163,11 @@
+@@ -161,8 +162,10 @@
          'src',
          'tools/msvs/genfiles',
          'deps/uv/src/ares',
 +        'deps/nghttp2/lib/includes',
 +        'deps/libsquash/include',
 +        'deps/libsquash/sample',
-+        'deps/libautoupdate/include',
          '<(SHARED_INTERMEDIATE_DIR)', # for node_natives.h
 -        'deps/nghttp2/lib/includes'
        ],
  
        'sources': [
-@@ -580,6 +585,8 @@
+@@ -580,6 +583,7 @@
        'dependencies': [
          '<(node_core_target_name)',
          'deps/gtest/gtest.gyp:gtest',
 +        'deps/libsquash/enclose_io_libsquash.gyp:enclose_io_libsquash',
-+        'deps/libautoupdate/libautoupdate.gyp:libautoupdate',
          'node_js2c#host',
          'node_dtrace_header',
          'node_dtrace_ustack',
@@ -432,17 +429,16 @@ index 775accc041..9f19a98106 100644
    Local<Object> events_obj = Object::New(env->isolate());
    CHECK(events_obj->SetPrototype(env->context(),
 diff --git a/src/node_main.cc b/src/node_main.cc
-index 7d6d9b1a01..3d05953cf8 100644
+index 7d6d9b1a01..3d0c1be14f 100644
 --- a/src/node_main.cc
 +++ b/src/node_main.cc
-@@ -21,11 +21,67 @@
+@@ -21,11 +21,53 @@
  
  #include "node.h"
  
 +// --------- [Enclose.IO Hack start] ---------
 +extern "C" {
 +  #include "enclose_io.h"
-+  #include "autoupdate.h"
 +}
 +// --------- [Enclose.IO Hack end] ---------
 +
@@ -452,22 +448,9 @@ index 7d6d9b1a01..3d05953cf8 100644
  
  int wmain(int argc, wchar_t *wargv[]) {
 +  // --------- [Enclose.IO Hack start] ---------
-+  int autoupdate_result;
 +  sqfs_err enclose_io_ret;
 +  int new_argc;
 +  wchar_t **new_argv;
-+
-+  #if ENCLOSE_IO_AUTO_UPDATE
-+    autoupdate_result = autoupdate(
-+      argc,
-+      wargv,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Host,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Port,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Path,
-+      ENCLOSE_IO_AUTO_UPDATE_BASE,
-+      0
-+    );
-+  #endif
 +
 +  enclose_io_ret = squash_start();
 +  assert(SQFS_OK == enclose_io_ret);
@@ -503,29 +486,16 @@ index 7d6d9b1a01..3d05953cf8 100644
    if (!IsWindows7OrGreater()) {
      fprintf(stderr, "This application is only supported on Windows 7, "
                      "Windows Server 2008 R2, or higher.");
-@@ -97,10 +153,70 @@ int main(int argc, char *argv[]) {
+@@ -97,10 +139,57 @@ int main(int argc, char *argv[]) {
      }
    }
  #endif
 +  // --------- [Enclose.IO Hack start] ---------
-+  int autoupdate_result;
 +  sqfs_err enclose_io_ret;
 +  char *argv_memory;
 +  int new_argc;
 +  char **new_argv;
-+  
-+  #if ENCLOSE_IO_AUTO_UPDATE
-+    autoupdate_result = autoupdate(
-+      argc,
-+      argv,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Host,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Port,
-+      ENCLOSE_IO_AUTO_UPDATE_URL_Path,
-+      ENCLOSE_IO_AUTO_UPDATE_BASE,
-+      0
-+    );
-+  #endif
-+  
++
 +  enclose_io_ret = squash_start();
 +  assert(SQFS_OK == enclose_io_ret);
 +  enclose_io_fs = (sqfs *)malloc(sizeof(sqfs));

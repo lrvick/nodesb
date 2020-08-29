@@ -1,9 +1,6 @@
 [submodule "modules/libsquash"]
 	path = modules/libsquash
 	url = https://git@github.com/pmq20/libsquash
-[submodule "modules/libautoupdate"]
-	path = modules/libautoupdate
-	url = https://git@github.com/pmq20/libautoupdate
 [submodule "modules/node"]
 	path = modules/node
 	url = https://git@github.com/nodejs/node
